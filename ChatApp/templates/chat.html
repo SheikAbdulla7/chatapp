@@ -1,0 +1,387 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Msg_IT | Chat</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/img_one.png' %}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-3.3.7/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+</head>
+<body>
+<div class="container app">
+  <div class="row app-one">
+    <div class="col-sm-4 side">
+      <div class="side-one">
+        <div class="row heading" style="display: flex;">
+          <div class="heading-avatar">
+            <div class="heading-avatar-icon dis-flex">
+              {% for i in myprofile %}
+              <div class="avatar-icon" id="profileImage" style="background:{{i.color}};">
+              {{i.nick}}
+                <!--<img src="https://bootdey.com/img/Content/avatar/avatar1.png">-->
+                  </div>
+              {% endfor %}
+              <!--<img src="https://bootdey.com/img/Content/avatar/avatar1.png">-->
+              <div class="p-l-6 p-t-6 p-r-6 p-b-6" style="margin-left: 10px;  font-size: large; font-weight: bold;">
+                  <span style="vertical-align: sub;">{{myname}}</span>
+                  <input type="hidden" id="myId" name="myId" value="{{myid}}"/>
+              </div>
+            </div>
+
+          </div>
+          <div class="heading-compose  pull-right" style="display: flex; justify-content: flex-end; flex-grow: 1;">
+            <!--<span class="fas fa-user-plus pull-right"></span>-->
+            <i class="fa fa-comments fa-2x  pull-right" aria-hidden="true"></i>
+            
+            
+          </div>
+          <div style="display: flex; justify-content: flex-end;">
+            <a class="btn btn-primary" style="margin-left: 20px" href="{% url 'logout' %}">Logout</a>
+          </div>
+          <!--<div class="heading-dot  pull-right">
+            <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+            
+          </div>-->
+        </div>
+
+        <div class="row searchBox">
+          <div class="col-sm-12 searchBox-inner">
+            <div class="form-group has-feedback">
+              <input id="searchText" type="text" class="form-control" name="searchText" placeholder="Search">
+              <!--<span class="glyphicon glyphicon-search form-control-feedback"></span>-->
+              <i class="fa fa-search form-control-feedback" aria-hidden="true" style="line-height: 2.3;"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="row sideBar">
+          {% for user in connected_room %}
+          <div class="row sideBar-body">
+            <div class="col-sm-3 col-xs-3 sideBar-avatar">
+              {% for dict in profiles %}
+                {% if dict.user__id == user.user__id%}
+                  <div class="avatar-icon" id="profileImage" style="background:{{dict.color}};">{{dict.nick}}
+                <!--<img src="https://bootdey.com/img/Content/avatar/avatar1.png">-->
+                  </div>
+                {% endif %}  
+              {% endfor %}
+            </div>
+            <div class="col-sm-9 col-xs-9 sideBar-main">
+              <div class="row">
+                <div class="col-sm-8 col-xs-8 sideBar-name">
+                  <span class="name-meta">{{user.user__username}}
+                  </span>
+                  <input type="hidden" id="connectUserId" name="connectUserId" value="{{user.user__id}}">
+                  <input type="hidden" id="connectRoomId" name="connectRoomId" value="{{user.room__roomid}}">
+                </div>
+                <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+                  <span class="time-meta pull-right">18:18
+                  </span>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="side-two">
+        <div class="row newMessage-heading">
+          <div class="row newMessage-main">
+            <div class="col-sm-2 col-xs-2 newMessage-back">
+              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </div>
+            <div class="col-sm-10 col-xs-10 newMessage-title">
+              New Chat
+            </div>
+          </div>
+        </div>
+
+        <div class="row composeBox">
+          <div class="col-sm-12 composeBox-inner">
+            <div class="form-group has-feedback">
+              <input id="composeText" type="text" class="form-control" name="searchText" placeholder="Search People">
+              <i class="fa fa-search form-control-feedback" aria-hidden="true" style="line-height: 2.3;"></i>
+              <!--<span class="glyphicon glyphicon-search form-control-feedback"></span>-->
+            </div>
+          </div>
+        </div>
+
+        <div class="row compose-sideBar">
+          {% csrf_token %}
+            {% for user in all_user %}
+            {% if user.username != myname %}
+                <div class="row sideBar-body">
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                      {% for dict in profiles %}
+                        {% if dict.user__id == user.id%}
+                          <div class="avatar-icon" id="profileImage" style="background:{{dict.color}};">{{dict.nick}}
+                            <!--<img src="https://bootdey.com/img/Content/avatar/avatar1.png">-->
+                          </div>
+                        {% endif %}  
+                      {% endfor %}
+                    </div>
+                    <div class="col-sm-9 col-xs-9 sideBar-main">
+                        <div class="row">
+                            <div class="col-sm-8 col-xs-8 sideBar-name">
+                                <span class="name-meta">{{user.username}}
+                                </span>
+                                <input type="hidden" id="custId" name="custId" value="{{user.id}}">
+                            </div>
+
+                            <div class="col-sm-4 col-xs-4 pull-right sideBar-add" style="text-align: center;">
+                                <!--<span class="time-meta pull-right">18:18-->
+                                  
+                                <button class="btn btn-primary add">Add</button>
+                                <!--</span>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          {% endif %}
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-8 empty">
+      <div class="title">
+        <h1 style="font-weight: 600;">Msg_iT</h1>
+      </div>
+      <div class="content">
+        <h3>Select contacts to send message</h3>
+      </div>
+      <div class="image-section" style="margin-top: 20px;">
+        <img src="{% static 'images/img_one.png' %}" style="width:200px">
+      </div>
+    </div>
+    <div class="col-sm-8 conversation">
+      <div class="row heading">
+        <div class="col-sm-1 col-xs-1 back-arrow">
+          <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+          <!--<div class="heading-avatar-icon">
+            <img src="https://bootdey.com/img/Content/avatar/avatar6.png">
+          </div>-->
+        </div>
+        <div class="col-sm-8 col-xs-7 heading-name">
+          <a class="heading-name-meta">Name
+          </a>
+          <input type="hidden" id="connectUserId" name="connectUserId" value="">
+          <input type="hidden" id="connectRoomId" name="connectRoomId" value="">
+          <span class="heading-online">Online</span>
+        </div>
+        <div class="col-sm-1 col-xs-1  heading-dot pull-right">
+          <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <div class="row message" id="conversation">
+        <!--<div class="row message-previous">
+          <div class="col-sm-12 previous">
+            <a onclick="previous(this)" id="ankitjain28" name="20">
+            Show Previous Message!
+            </a>
+          </div>
+        </div>-->
+        <div class="msg">
+          <!--<div class="row message-body">
+            <div class="col-sm-12 message-main-receiver">
+              <div class="receiver">
+                <div class="message-text">
+                 Hi, what are you doing?!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  I am doing nothing man!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 15px; margin-bottom: 15px;">
+            <span style="padding: 6px 16px; background-color: #d7eefa; border-radius: 6px;">today</span>
+          </div>
+          <div>
+            <span>today</span>
+          </div>
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-receiver">
+              <div class="receiver">
+                <div class="message-text">
+                 Hi, what are you doing?!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  I am doing nothing man!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-receiver">
+              <div class="receiver">
+                <div class="message-text">
+                 Hi, what are you doing?!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  I am doing nothing man!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-receiver">
+              <div class="receiver">
+                <div class="message-text">
+                 Hi, what are you doing?!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  I am doing nothing man!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-receiver">
+              <div class="receiver">
+                <div class="message-text">
+                 Hi, what are you doing?!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  I am doing nothing man!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-receiver">
+              <div class="receiver">
+                <div class="message-text">
+                 Hi, what are you doing?!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  I am doing nothing man!
+                </div>
+                <span class="message-time pull-right">
+                  Sun
+                </span>
+              </div>
+            </div>
+          </div>-->
+
+        </div>
+        </div>
+        
+
+      <div class="row reply">
+        {% csrf_token %}
+        <div class="col-sm-1 col-xs-1 reply-emojis" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover">
+          <i class="fa fa-smile-o fa-2x"></i>
+        </div>
+        <div class="col-sm-9 col-xs-9 reply-main">
+          <textarea class="form-control" rows="1" id="comment" placeholder="Enter message"></textarea>
+        </div>
+        <div class="col-sm-1 col-xs-1 reply-recording">
+          <label for="upload"><i class="fa fa-paperclip fa-2x" aria-hidden="true"></i></label>
+          <input type="file" name="send-image" id="upload"  accept="image/*" style="display:none;">
+        </div>
+        <div class="col-sm-1 col-xs-1 reply-send">
+          <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+<!--<script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>-->
+<script type="text/javascript" src="{% static 'js/socket.io.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/socket.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'js/utils.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/chat.js' %}"></script>
+</body>
+</html>

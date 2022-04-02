@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Error</title>
+	<link rel="shortcut icon" type="image/png" href="{% static 'images/img_one.png' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/material-design-iconic-font.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+	<style type="text/css">
+		@font-face {
+		  font-family: Poppins-Regular;
+		  /*src: url("{% static '/fonts/poppins/Poppins-Regular.ttf' %}"); */
+		  src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
+		}
+
+		@font-face {
+		  font-family: Poppins-Medium;
+		  src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
+		}
+
+		@font-face {
+		  font-family: Poppins-Bold;
+		  src: url("../fonts/poppins/Poppins-Bold.ttf") format("truetype");
+		}
+
+		@font-face {
+		  font-family: Poppins-SemiBold;
+		  src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
+		}
+		*{
+			font-family: Poppins-Regular, sans-serif;
+		}
+		.container{
+			width: fit-content;
+			position: absolute;
+			border-radius: 10px;
+			top: 25%;
+			left: 30%;
+			align-items: center;
+			flex-direction: column;
+			padding: 10px 20px;
+box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;}		}
+	</style>
+</head>
+<body>
+	<div class="container p-10 d-flex">
+		<div class="fs-50">You are not logged in</div>
+		<div class="d-flex">
+			<!--<a href="{% url 'login' %}">Login</a>-->
+			<span class="m-l-10">Login to chat with your friends</span>
+		</div>
+		<button class="btn btn-primary m-t-10"><a href="{% url 'login' %}" style="text-decoration: none; color: white;">Login</a></button>
+	</div>
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<!--<script type="text/javascript" src="{% static 'js/socket.js' %}"></script>-->
+</body>
+</html>
